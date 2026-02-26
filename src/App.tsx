@@ -90,10 +90,6 @@ export default function App() {
   }, [user]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
-  }, [user]);
-
-  useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
