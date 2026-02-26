@@ -78,6 +78,7 @@ export default function App() {
     },
     notes: ''
   });
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
@@ -103,6 +104,10 @@ export default function App() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.university || !formData.course) {
+      alert('Please fill in both University and Course name.');
+      return;
+    }
     if (formData.id) {
       setApplications(apps => apps.map(a => a.id === formData.id ? (formData as Application) : a));
     } else {
@@ -137,9 +142,8 @@ export default function App() {
   };
 
   const deleteApplication = (id: string) => {
-    if (confirm('Are you sure you want to delete this application?')) {
-      setApplications(apps => apps.filter(a => a.id !== id));
-    }
+    setApplications(apps => apps.filter(a => a.id !== id));
+    setConfirmDeleteId(null);
   };
 
   const openEdit = (app: Application) => {
@@ -306,14 +310,34 @@ export default function App() {
                       ))}
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={() => openEdit(app)} className="text-slate-400 hover:text-uni-blue font-bold px-3 py-1 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1">
-                        <Edit2 size={14} />
-                        Edit
+                      <button onClick={() => openEdit(app)} className="text-slate-400 hover:text-uni-blue font-bold px-3 py-2 rounded-xl hover:bg-slate-50 transition-all flex items-center gap-2">
+                        <Edit2 size={16} />
+                        <span className="text-xs">Edit</span>
                       </button>
-                      <button onClick={() => deleteApplication(app.id)} className="text-slate-400 hover:text-german-red font-bold px-3 py-1 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1">
-                        <Trash2 size={14} />
-                        Delete
-                      </button>
+                      {confirmDeleteId === app.id ? (
+                        <div className="flex items-center gap-1 animate-in fade-in zoom-in duration-200">
+                          <button
+                            onClick={() => deleteApplication(app.id)}
+                            className="bg-german-red text-white text-[10px] font-black uppercase tracking-wider px-3 py-2 rounded-lg shadow-lg shadow-red-100"
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="text-slate-400 text-[10px] font-bold px-2 py-2"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setConfirmDeleteId(app.id)}
+                          className="text-slate-400 hover:text-german-red font-bold px-3 py-2 rounded-xl hover:bg-slate-50 transition-all flex items-center gap-2"
+                        >
+                          <Trash2 size={16} />
+                          <span className="text-xs">Delete</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
