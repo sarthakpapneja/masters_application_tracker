@@ -8,14 +8,7 @@ export interface Application {
     status: ApplicationStatus;
     uniAssist: boolean;
     vpdRequired: boolean;
-    documents: {
-        sop: boolean;
-        lor1: boolean;
-        lor2: boolean;
-        transcript: boolean;
-        cv: boolean;
-        languageCert: boolean;
-    };
+    documents: Record<string, boolean>;
     notes: string;
 }
 
@@ -25,3 +18,9 @@ export type Stats = {
     accepted: number;
     pending: number;
 };
+
+export interface User {
+    isAuthenticated: boolean;
+    name: string;
+    email: string;
+}
