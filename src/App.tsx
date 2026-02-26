@@ -448,30 +448,16 @@ export default function App() {
               </div>
               <div className="space-y-4">
                 {applications.slice(0, 3).map(app => (
-                  <motion.div
+                  <ApplicationCard
                     key={app.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    onClick={() => openEdit(app)}
-                    className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 dark:hover:shadow-blue-500/5 hover:border-uni-accent/30 transition-all group cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-4 overflow-hidden">
-                        <div className="flex-shrink-0 w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-xl font-black text-slate-400 group-hover:text-uni-accent group-hover:bg-uni-accent/5 dark:group-hover:bg-blue-900/20 transition-colors">
-                          {app.university[0]}
-                        </div>
-                        <div className="overflow-hidden">
-                          <h4 className="font-bold text-slate-900 dark:text-white truncate">{app.university}</h4>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 font-bold truncate tracking-tight">{app.course}</p>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                        <span className={cn("px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border", getStatusColor(app.status))}>
-                          {app.status}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
+                    app={app}
+                    showActions={false}
+                    onEdit={() => { }}
+                    onDelete={() => { }}
+                    confirmDeleteId={null}
+                    setConfirmDeleteId={() => { }}
+                    getStatusColor={getStatusColor}
+                  />
                 ))}
                 {applications.length === 0 && (
                   <div className="bg-white border-2 border-dashed border-slate-200 rounded-3xl p-10 text-center space-y-4">
@@ -509,109 +495,16 @@ export default function App() {
             <div className="grid gap-6 pb-20">
               <AnimatePresence mode="popLayout">
                 {applications.map(app => (
-                  <motion.div
-                    layout
+                  <ApplicationCard
                     key={app.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-white dark:bg-slate-900 overflow-hidden rounded-[2rem] border border-slate-200/60 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all group"
-                  >
-                    <div className="p-5 sm:p-7 space-y-6">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-center gap-4 sm:gap-5 overflow-hidden">
-                          <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-2xl font-black text-uni-accent group-hover:bg-uni-accent/5 transition-colors">
-                            {app.university[0]}
-                          </div>
-                          <div className="overflow-hidden">
-                            <h3 className="font-black text-xl sm:text-2xl text-slate-900 dark:text-white tracking-tight truncate">{app.university}</h3>
-                            <p className="text-slate-500 dark:text-slate-400 font-bold text-sm tracking-tight truncate">{app.course}</p>
-                          </div>
-                        </div>
-                        <span className={cn("flex-shrink-0 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest border shadow-sm h-fit", getStatusColor(app.status))}>
-                          {app.status}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 py-5 border-y border-slate-100 dark:border-slate-800">
-                        <div className="space-y-1">
-                          <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Deadline</span>
-                          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-bold">
-                            <Clock size={14} className="text-amber-500" />
-                            <span className="text-xs sm:text-sm">{app.deadline || 'No deadline'}</span>
-                          </div>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Requirements</span>
-                          <div className="flex flex-wrap gap-1.5">
-                            {app.uniAssist && <span className="bg-blue-50 dark:bg-blue-900/30 text-uni-accent text-[8px] font-black px-1.5 py-0.5 rounded-md border border-blue-100 dark:border-blue-900/50 uppercase">Uni-Assist</span>}
-                            {app.vpdRequired && <span className="bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[8px] font-black px-1.5 py-0.5 rounded-md border border-amber-100 dark:border-amber-900/50 uppercase">VPD</span>}
-                            {!app.uniAssist && !app.vpdRequired && <span className="text-slate-400 text-[10px] font-bold">Standard</span>}
-                          </div>
-                        </div>
-                        <div className="space-y-1 col-span-2 md:col-span-1">
-                          <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Docs Ready</span>
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-green-500"
-                                style={{ width: `${(Object.values(app.documents).filter(Boolean).length / Math.max(1, Object.keys(app.documents).length)) * 100}%` }}
-                              />
-                            </div>
-                            <span className="text-[10px] font-black text-green-600 dark:text-green-400 whitespace-nowrap">
-                              {Object.values(app.documents).filter(Boolean).length}/{Object.keys(app.documents).length}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-1.5 overflow-hidden">
-                          <FileCheck size={14} className="text-slate-400 dark:text-slate-500 flex-shrink-0" />
-                          <div className="flex -space-x-1 overflow-hidden p-0.5">
-                            {Object.entries(app.documents).filter(([_, v]) => v).slice(0, 6).map(([k]) => (
-                              <div key={k} className="w-5 h-5 rounded-full bg-green-500 border-2 border-white dark:border-slate-900 shadow-sm flex-shrink-0" title={k}></div>
-                            ))}
-                            {Object.values(app.documents).filter(Boolean).length > 6 && (
-                              <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[8px] font-bold text-slate-500 flex-shrink-0">
-                                +{Object.values(app.documents).filter(Boolean).length - 6}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <button onClick={() => openEdit(app)} className="h-10 w-10 sm:w-auto sm:px-4 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-uni-accent dark:hover:text-blue-400 rounded-xl transition-all flex items-center justify-center gap-2">
-                            <Edit2 size={16} />
-                            <span className="hidden sm:inline font-bold text-sm">Edit</span>
-                          </button>
-                          {confirmDeleteId === app.id ? (
-                            <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
-                              <button
-                                onClick={() => deleteApplication(app.id)}
-                                className="bg-red-500 text-white text-[10px] font-black uppercase tracking-widest px-4 h-10 rounded-xl shadow-lg shadow-red-500/20"
-                              >
-                                Delete
-                              </button>
-                              <button
-                                onClick={() => setConfirmDeleteId(null)}
-                                className="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest px-2"
-                              >
-                                No
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => setConfirmDeleteId(app.id)}
-                              className="h-10 w-10 text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all flex items-center justify-center"
-                              title="Delete"
-                            >
-                              <Trash2 size={18} />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                    app={app}
+                    showActions={true}
+                    onEdit={openEdit}
+                    onDelete={deleteApplication}
+                    confirmDeleteId={confirmDeleteId}
+                    setConfirmDeleteId={setConfirmDeleteId}
+                    getStatusColor={getStatusColor}
+                  />
                 ))}
               </AnimatePresence>
             </div>
@@ -849,6 +742,135 @@ export default function App() {
   );
 }
 
+
+function ApplicationCard({
+  app,
+  showActions,
+  onEdit,
+  onDelete,
+  confirmDeleteId,
+  setConfirmDeleteId,
+  getStatusColor
+}: {
+  app: Application,
+  showActions: boolean,
+  onEdit: (app: Application) => void,
+  onDelete: (id: string) => void,
+  confirmDeleteId: string | null,
+  setConfirmDeleteId: (id: string | null) => void,
+  getStatusColor: (status: ApplicationStatus) => string
+}) {
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      onClick={() => !showActions && onEdit(app)}
+      className={cn(
+        "bg-white dark:bg-slate-900 overflow-hidden rounded-[2rem] border border-slate-200/60 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all group",
+        !showActions && "cursor-pointer"
+      )}
+    >
+      <div className="p-5 sm:p-7 space-y-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4 sm:gap-5 overflow-hidden">
+            <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-2xl font-black text-uni-accent group-hover:bg-uni-accent/5 transition-colors">
+              {app.university[0]}
+            </div>
+            <div className="overflow-hidden">
+              <h3 className="font-black text-xl sm:text-2xl text-slate-900 dark:text-white tracking-tight truncate">{app.university}</h3>
+              <p className="text-slate-500 dark:text-slate-400 font-bold text-sm tracking-tight truncate">{app.course}</p>
+            </div>
+          </div>
+          <span className={cn("px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest border h-fit flex-shrink-0", getStatusColor(app.status))}>
+            {app.status}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 py-5 border-y border-slate-100 dark:border-slate-800">
+          <div className="space-y-1">
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Deadline</span>
+            <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-bold">
+              <Clock size={14} className="text-amber-500" />
+              <span className="text-xs sm:text-sm">{app.deadline || 'No deadline'}</span>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Requirements</span>
+            <div className="flex flex-wrap gap-1.5">
+              {app.uniAssist && <span className="bg-blue-50 dark:bg-blue-900/30 text-uni-accent text-[8px] font-black px-1.5 py-0.5 rounded-md border border-blue-100 dark:border-blue-900/50 uppercase">Uni-Assist</span>}
+              {app.vpdRequired && <span className="bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[8px] font-black px-1.5 py-0.5 rounded-md border border-amber-100 dark:border-amber-900/50 uppercase">VPD</span>}
+              {!app.uniAssist && !app.vpdRequired && <span className="text-slate-400 text-[10px] font-bold">Standard</span>}
+            </div>
+          </div>
+          <div className="space-y-1 col-span-2 md:col-span-1">
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Docs Ready</span>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-green-500"
+                  style={{ width: `${(Object.values(app.documents).filter(Boolean).length / Math.max(1, Object.keys(app.documents).length)) * 100}%` }}
+                />
+              </div>
+              <span className="text-[10px] font-black text-green-600 dark:text-green-400 whitespace-nowrap">
+                {Object.values(app.documents).filter(Boolean).length}/{Object.keys(app.documents).length}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-1.5 overflow-hidden">
+            <FileCheck size={14} className="text-slate-400 dark:text-slate-500 flex-shrink-0" />
+            <div className="flex -space-x-1 overflow-hidden p-0.5">
+              {Object.entries(app.documents).filter(([_, v]) => v).slice(0, 6).map(([k]) => (
+                <div key={k} className="w-5 h-5 rounded-full bg-green-500 border-2 border-white dark:border-slate-900 shadow-sm flex-shrink-0" title={k}></div>
+              ))}
+              {Object.values(app.documents).filter(Boolean).length > 6 && (
+                <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[8px] font-bold text-slate-500 flex-shrink-0">
+                  +{Object.values(app.documents).filter(Boolean).length - 6}
+                </div>
+              )}
+            </div>
+          </div>
+          {showActions && (
+            <div className="flex gap-2">
+              <button onClick={() => onEdit(app)} className="h-10 w-10 sm:w-auto sm:px-4 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-uni-accent dark:hover:text-blue-400 rounded-xl transition-all flex items-center justify-center gap-2">
+                <Edit2 size={16} />
+                <span className="hidden sm:inline font-bold text-sm">Edit</span>
+              </button>
+              {confirmDeleteId === app.id ? (
+                <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
+                  <button
+                    onClick={() => onDelete(app.id)}
+                    className="bg-red-500 text-white text-[10px] font-black uppercase tracking-widest px-4 h-10 rounded-xl shadow-lg shadow-red-500/20"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setConfirmDeleteId(null)}
+                    className="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest px-2"
+                  >
+                    No
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setConfirmDeleteId(app.id)}
+                  className="h-10 w-10 text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all flex items-center justify-center"
+                  title="Delete"
+                >
+                  <Trash2 size={18} />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 function StatCard({ label, value, icon, color, darkMode }: { label: string, value: number, icon: React.ReactNode, color: string, darkMode: boolean }) {
   return (
