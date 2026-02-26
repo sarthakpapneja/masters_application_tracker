@@ -520,7 +520,7 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-t-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 space-y-6 sm:space-y-8 my-auto border-t sm:border border-white/10"
+              className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-t-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 space-y-6 sm:space-y-8 my-auto border-t sm:border border-white/10 overflow-y-auto max-h-[90vh] shadow-2xl"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -568,23 +568,23 @@ export default function App() {
 
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
+                      <div className="space-y-2 min-w-0">
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Deadline</label>
                         <input
                           required
                           type="date"
                           value={formData.deadline}
                           onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                          className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white [color-scheme:dark] min-h-[56px]"
+                          className="w-full max-w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white [color-scheme:dark] min-h-[56px] box-border"
                         />
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-2 min-w-0">
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Status</label>
                         <div className="relative">
                           <select
                             value={formData.status}
                             onChange={(e) => setFormData({ ...formData, status: e.target.value as ApplicationStatus })}
-                            className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white appearance-none pr-12 min-h-[56px]"
+                            className="w-full max-w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white appearance-none pr-12 min-h-[56px] box-border"
                           >
                             <option>Interested</option>
                             <option>Applied</option>
