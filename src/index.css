@@ -1,31 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  --color-german-red: #da291c;
-  --color-german-gold: #ffce00;
-  --color-german-black: #000000;
-  --color-uni-blue: #003399;
+  --color-uni-blue: #1e293b;
+  /* Slate-800 - much more muted */
+  --color-german-red: #991b1b;
+  /* Red-800 - more professional */
+  --color-german-yellow: #eab308;
+  /* Yellow-600 */
+  --bg-glass: rgba(255, 255, 0.6);
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --bg-dark-glass: rgba(15, 23, 42, 0.4);
+  --border-dark-glass: rgba(255, 255, 255, 0.05);
 }
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@layer base {
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    @apply bg-slate-50 text-slate-900 transition-colors duration-300;
+  }
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #f8fafc;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  .dark body {
+    @apply bg-slate-950 text-slate-200;
+  }
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  color: #1a1a1a;
-  @apply bg-slate-50 text-slate-900;
+@layer components {
+  .glass {
+    @apply bg-white/60 backdrop-blur-md border border-white/10 shadow-sm;
+  }
+
+  .dark .glass {
+    @apply bg-slate-900/40 border-white/5;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400;
+  }
 }

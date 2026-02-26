@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, LayoutDashboard, ListTodo, CheckCircle2, AlertCircle, Clock, GraduationCap, Menu, X, Save, Trash2, Edit2, FileCheck, Moon, Sun, LogOut, User as UserIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { Application, ApplicationStatus, Stats, User } from './types';
+import type { Application, ApplicationStatus, Stats, User, RegisteredUser } from './types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -9,52 +9,48 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const STORAGE_KEY_APPS = 'germany-masters-applications';
 const STORAGE_KEY_USER = 'germany-masters-user';
+const STORAGE_KEY_USERS_LIST = 'germany-masters-users-list';
 
-const DUMMY_DATA: Application[] = [
-  {
-    id: '1',
-    university: 'TU Munich',
-    course: 'M.Sc. Informatics',
-    deadline: '2024-05-31',
-    status: 'Interested',
-    uniAssist: false,
-    vpdRequired: false,
-    documents: { sop: true, lor1: true, lor2: true, transcript: true, cv: true, languageCert: true, gre: true, ielts: true, passport: true, photo: true },
-    notes: 'Requires GRE. High competition.'
-  },
-  {
-    id: '2',
-    university: 'RWTH Aachen',
-    course: 'M.Sc. Data Science',
-    deadline: '2024-03-01',
-    status: 'Applied',
-    uniAssist: false,
-    vpdRequired: true,
-    documents: { sop: true, lor1: true, lor2: true, transcript: true, cv: true, languageCert: true, gre: false, ielts: true, passport: true, photo: false },
-    notes: 'VPD applied via Uni-Assist.'
-  }
-];
+const getAppsStorageKey = (email: string) => `germany-masters-applications-${email}`;
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
-  const [applications, setApplications] = useState<Application[]>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY_APPS);
-    if (stored) {
-      try {
-        return JSON.parse(stored);
-      } catch (e) {
-        return DUMMY_DATA;
-      }
-    }
-    return DUMMY_DATA;
-  });
-
   const [user, setUser] = useState<User>(() => {
     const stored = localStorage.getItem(STORAGE_KEY_USER);
     return stored ? JSON.parse(stored) : { isAuthenticated: false, name: '', email: '' };
   });
+
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load applications when user changes
+  useEffect(() => {
+    if (user.isAuthenticated && user.email) {
+      const key = getAppsStorageKey(user.email);
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        try {
+          setApplications(JSON.parse(stored));
+        } catch (e) {
+          setApplications([]);
+        }
+      } else {
+        setApplications([]);
+      }
+      setIsLoaded(true);
+    } else {
+      setApplications([]);
+      setIsLoaded(false);
+    }
+  }, [user.isAuthenticated, user.email]);
+
+  // Persist applications
+  useEffect(() => {
+    if (user.isAuthenticated && user.email && isLoaded) {
+      localStorage.setItem(getAppsStorageKey(user.email), JSON.stringify(applications));
+    }
+  }, [applications, user.email, user.isAuthenticated, isLoaded]);
 
   const [view, setView] = useState<'dashboard' | 'list'>('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -90,8 +86,8 @@ export default function App() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_APPS, JSON.stringify(applications));
-  }, [applications]);
+    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
+  }, [user]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
@@ -106,6 +102,9 @@ export default function App() {
       localStorage.setItem('theme', 'light');
     }
   }, [darkMode]);
+
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [loginName, setLoginName] = useState('');
 
   const stats: Stats = {
     total: applications.length,
@@ -189,18 +188,53 @@ export default function App() {
     setIsModalOpen(true);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoggingIn(true);
-    // Mock authentication delay
+
+    // Mock network delay
     setTimeout(() => {
-      setUser({
-        isAuthenticated: true,
-        name: loginEmail.split('@')[0] || 'User',
-        email: loginEmail
-      });
+      const users: RegisteredUser[] = JSON.parse(localStorage.getItem(STORAGE_KEY_USERS_LIST) || '[]');
+
+      if (isSignUp) {
+        // Sign Up Logic
+        if (users.find(u => u.email === loginEmail)) {
+          alert('User already exists. Please sign in.');
+          setIsSignUp(false);
+          setIsLoggingIn(false);
+          return;
+        }
+
+        const newUser: RegisteredUser = {
+          name: loginName || loginEmail.split('@')[0],
+          email: loginEmail,
+          password: loginPassword
+        };
+
+        const updatedUsers = [...users, newUser];
+        localStorage.setItem(STORAGE_KEY_USERS_LIST, JSON.stringify(updatedUsers));
+
+        setUser({
+          isAuthenticated: true,
+          name: newUser.name,
+          email: newUser.email
+        });
+      } else {
+        // Login Logic
+        const foundUser = users.find(u => u.email === loginEmail && u.password === loginPassword);
+
+        if (foundUser) {
+          setUser({
+            isAuthenticated: true,
+            name: foundUser.name,
+            email: foundUser.email
+          });
+        } else {
+          alert('Invalid email or password.');
+        }
+      }
       setIsLoggingIn(false);
-    }, 1500);
+    }, 1000);
   };
 
   const handleLogout = () => {
@@ -228,8 +262,25 @@ export default function App() {
             <p className="text-slate-400 font-medium">Your gateway to German excellence</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleAuth} className="space-y-6">
             <div className="space-y-4">
+              {isSignUp && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="space-y-1"
+                >
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={loginName}
+                    onChange={(e) => setLoginName(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-uni-blue/50 transition-all font-medium"
+                    placeholder="Your Name"
+                  />
+                </motion.div>
+              )}
               <div className="space-y-1">
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Email Address</label>
                 <input
@@ -262,16 +313,22 @@ export default function App() {
               {isLoggingIn ? (
                 <div className="flex items-center justify-center gap-3">
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Entering...</span>
+                  <span>{isSignUp ? 'Creating Account...' : 'Entering...'}</span>
                 </div>
               ) : (
-                "Sign In"
+                isSignUp ? "Create Account" : "Sign In"
               )}
             </button>
           </form>
 
           <p className="text-center text-slate-500 text-sm font-medium">
-            Don't have an account? <span className="text-uni-blue cursor-pointer hover:underline">Request access</span>
+            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+            <span
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-uni-blue cursor-pointer hover:underline"
+            >
+              {isSignUp ? "Sign In" : "Sign Up"}
+            </span>
           </p>
         </motion.div>
       </div>
@@ -738,7 +795,7 @@ export default function App() {
                                 e.stopPropagation();
                                 setEditingDocKey(key);
                                 setEditingDocValue(key);
-                               }}
+                              }}
                               className="truncate w-full px-2 hover:underline cursor-text"
                               title="Click to rename"
                             >
