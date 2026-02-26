@@ -332,7 +332,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col md:flex-row transition-colors duration-300">
       {/* Mobile Header */}
       <header className="md:hidden bg-white dark:bg-slate-900 border-b dark:border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors">
         <h1 className="text-xl font-bold text-uni-blue dark:text-blue-400 flex items-center gap-2">
@@ -460,9 +460,9 @@ export default function App() {
                   />
                 ))}
                 {applications.length === 0 && (
-                  <div className="bg-white border-2 border-dashed border-slate-200 rounded-3xl p-10 text-center space-y-4">
-                    <div className="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-                      <ListTodo className="text-slate-400" size={32} />
+                  <div className="bg-white dark:bg-slate-900/50 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl p-10 text-center space-y-4 shadow-inner">
+                    <div className="bg-slate-50 dark:bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+                      <ListTodo className="text-slate-400 dark:text-slate-500" size={32} />
                     </div>
                     <div>
                       <h4 className="font-bold text-slate-800">No applications yet</h4>
