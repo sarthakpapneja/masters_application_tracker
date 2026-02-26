@@ -321,11 +321,11 @@ export default function App() {
             </button>
           </form>
 
-          <p className="text-center text-slate-500 text-sm font-medium">
+          <p className="text-center text-slate-400 text-sm font-medium">
             {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
             <span
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-uni-blue cursor-pointer hover:underline"
+              className="text-uni-accent cursor-pointer hover:underline font-bold"
             >
               {isSignUp ? "Sign In" : "Sign Up"}
             </span>
@@ -378,21 +378,21 @@ export default function App() {
           <button
             onClick={() => { setView('dashboard'); setIsSidebarOpen(false); }}
             className={cn(
-              "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium",
-              view === 'dashboard' ? "bg-uni-blue text-white shadow-lg shadow-blue-100" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+              "w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-bold text-sm",
+              view === 'dashboard' ? "bg-uni-accent text-white shadow-lg shadow-blue-500/20" : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
             )}
           >
-            <LayoutDashboard size={20} />
+            <LayoutDashboard size={18} />
             Dashboard
           </button>
           <button
             onClick={() => { setView('list'); setIsSidebarOpen(false); }}
             className={cn(
-              "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium",
-              view === 'list' ? "bg-uni-blue text-white shadow-lg shadow-blue-100" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+              "w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-bold text-sm",
+              view === 'list' ? "bg-uni-accent text-white shadow-lg shadow-blue-500/20" : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
             )}
           >
-            <ListTodo size={20} />
+            <ListTodo size={18} />
             Applications
           </button>
         </div>
@@ -419,9 +419,9 @@ export default function App() {
 
         <button
           onClick={() => { resetForm(); setIsModalOpen(true); }}
-          className="bg-german-red text-white w-full py-4 rounded-2xl flex items-center justify-center gap-2 font-bold shadow-lg shadow-red-100 active:scale-95 transition-transform mt-6"
+          className="bg-uni-accent text-white w-full py-4 rounded-2xl flex items-center justify-center gap-2 font-black shadow-xl shadow-blue-500/20 active:scale-95 transition-all mt-6"
         >
-          <Plus size={24} />
+          <Plus size={24} strokeWidth={3} />
           New Application
         </button>
       </nav>
@@ -454,29 +454,25 @@ export default function App() {
                 {applications.slice(0, 3).map(app => (
                   <motion.div
                     key={app.id}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
                     onClick={() => openEdit(app)}
-                    className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-lg hover:shadow-blue-50/50 dark:hover:shadow-blue-900/10 hover:border-uni-blue/20 dark:hover:border-blue-500/20 transition-all group cursor-pointer"
+                    className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 dark:hover:shadow-blue-500/5 hover:border-uni-accent/30 transition-all group cursor-pointer"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-xl font-black text-slate-400 group-hover:text-uni-blue group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-colors">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4 overflow-hidden">
+                        <div className="flex-shrink-0 w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-xl font-black text-slate-400 group-hover:text-uni-accent group-hover:bg-uni-accent/5 dark:group-hover:bg-blue-900/20 transition-colors">
                           {app.university[0]}
                         </div>
-                        <div>
-                          <h4 className="font-bold text-slate-800 dark:text-slate-100">{app.university}</h4>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{app.course}</p>
+                        <div className="overflow-hidden">
+                          <h4 className="font-bold text-slate-900 dark:text-white truncate">{app.university}</h4>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 font-bold truncate tracking-tight">{app.course}</p>
                         </div>
                       </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <span className={cn("px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border", getStatusColor(app.status))}>
+                      <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                        <span className={cn("px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border", getStatusColor(app.status))}>
                           {app.status}
                         </span>
-                        <div className="flex gap-1.5">
-                          {app.uniAssist && <span className="bg-blue-50 dark:bg-blue-900/30 text-uni-blue dark:text-blue-400 text-[8px] font-black px-1.5 py-0.5 rounded-md border border-blue-100 dark:border-blue-900/50 uppercase">Uni-Assist</span>}
-                          {app.vpdRequired && <span className="bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[8px] font-black px-1.5 py-0.5 rounded-md border border-amber-100 dark:border-amber-900/50 uppercase">VPD</span>}
-                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -520,89 +516,103 @@ export default function App() {
                   <motion.div
                     layout
                     key={app.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-lg hover:shadow-slate-200/50 dark:hover:shadow-blue-900/10 transition-all space-y-6 group"
+                    className="bg-white dark:bg-slate-900 overflow-hidden rounded-[2rem] border border-slate-200/60 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all group"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-5">
-                        <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-[1.5rem] flex items-center justify-center text-2xl font-black text-uni-blue dark:text-blue-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-colors">
-                          {app.university[0]}
-                        </div>
-                        <div>
-                          <h3 className="font-black text-2xl text-slate-800 dark:text-slate-100 tracking-tight">{app.university}</h3>
-                          <p className="text-slate-500 dark:text-slate-400 font-bold text-sm tracking-wide">{app.course}</p>
-                        </div>
-                      </div>
-                      <span className={cn("px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm", getStatusColor(app.status))}>
-                        {app.status}
-                      </span>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-6 py-4 border-y border-slate-50 dark:border-slate-800">
-                      <div className="space-y-1">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Deadline</span>
-                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-bold">
-                          <Clock size={16} className="text-amber-500" />
-                          <span className="text-sm">{app.deadline || 'No deadline'}</span>
-                        </div>
-                      </div>
-                      <div className="space-y-1">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Process</span>
-                        <div className="flex flex-wrap gap-2">
-                          {app.uniAssist && <span className="bg-blue-50 dark:bg-blue-900/30 text-uni-blue dark:text-blue-400 text-[9px] font-black px-2 py-1 rounded-lg border border-blue-100 dark:border-blue-900/50 uppercase italic">Uni-Assist</span>}
-                          {app.vpdRequired && <span className="bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[9px] font-black px-2 py-1 rounded-lg border border-amber-100 dark:border-amber-900/50 uppercase italic">VPD</span>}
-                        </div>
-                      </div>
-                      <div className="space-y-1">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Documents Readiness</span>
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm font-black text-green-600 dark:text-green-400">
-                            {Object.values(app.documents).filter(Boolean).length} / {Object.keys(app.documents).length} Ready
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-2">
-                      <div className="flex items-center gap-1">
-                        <FileCheck size={16} className="text-slate-300 dark:text-slate-600 mr-1" />
-                        <div className="flex -space-x-1">
-                          {Object.entries(app.documents).filter(([_, v]) => v).slice(0, 5).map(([k]) => (
-                            <div key={k} className="w-5 h-5 rounded-full bg-green-500 border-2 border-white dark:border-slate-900 shadow-sm" title={k}></div>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button onClick={() => openEdit(app)} className="text-slate-500 dark:text-slate-400 hover:text-uni-blue dark:hover:text-blue-400 font-black px-4 py-2 rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center gap-2 text-sm">
-                          <Edit2 size={16} />
-                          Edit
-                        </button>
-                        {confirmDeleteId === app.id ? (
-                          <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
-                            <button
-                              onClick={() => deleteApplication(app.id)}
-                              className="bg-german-red text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl shadow-lg shadow-red-100 dark:shadow-none"
-                            >
-                              Confirm
-                            </button>
-                            <button
-                              onClick={() => setConfirmDeleteId(null)}
-                              className="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest px-2"
-                            >
-                              Cancel
-                            </button>
+                    <div className="p-5 sm:p-7 space-y-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-center gap-4 sm:gap-5 overflow-hidden">
+                          <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-2xl font-black text-uni-accent group-hover:bg-uni-accent/5 transition-colors">
+                            {app.university[0]}
                           </div>
-                        ) : (
-                          <button
-                            onClick={() => setConfirmDeleteId(app.id)}
-                            className="p-2.5 text-slate-300 dark:text-slate-600 hover:text-german-red dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-2xl transition-all"
-                            title="Delete"
-                          >
-                            <Trash2 size={20} />
+                          <div className="overflow-hidden">
+                            <h3 className="font-black text-xl sm:text-2xl text-slate-900 dark:text-white tracking-tight truncate">{app.university}</h3>
+                            <p className="text-slate-500 dark:text-slate-400 font-bold text-sm tracking-tight truncate">{app.course}</p>
+                          </div>
+                        </div>
+                        <span className={cn("flex-shrink-0 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest border shadow-sm h-fit", getStatusColor(app.status))}>
+                          {app.status}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 py-5 border-y border-slate-100 dark:border-slate-800">
+                        <div className="space-y-1">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Deadline</span>
+                          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-bold">
+                            <Clock size={14} className="text-amber-500" />
+                            <span className="text-xs sm:text-sm">{app.deadline || 'No deadline'}</span>
+                          </div>
+                        </div>
+                        <div className="space-y-1">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Requirements</span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {app.uniAssist && <span className="bg-blue-50 dark:bg-blue-900/30 text-uni-accent text-[8px] font-black px-1.5 py-0.5 rounded-md border border-blue-100 dark:border-blue-900/50 uppercase">Uni-Assist</span>}
+                            {app.vpdRequired && <span className="bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[8px] font-black px-1.5 py-0.5 rounded-md border border-amber-100 dark:border-amber-900/50 uppercase">VPD</span>}
+                            {!app.uniAssist && !app.vpdRequired && <span className="text-slate-400 text-[10px] font-bold">Standard</span>}
+                          </div>
+                        </div>
+                        <div className="space-y-1 col-span-2 md:col-span-1">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Docs Ready</span>
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-green-500"
+                                style={{ width: `${(Object.values(app.documents).filter(Boolean).length / Math.max(1, Object.keys(app.documents).length)) * 100}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] font-black text-green-600 dark:text-green-400 whitespace-nowrap">
+                              {Object.values(app.documents).filter(Boolean).length}/{Object.keys(app.documents).length}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-1.5 overflow-hidden">
+                          <FileCheck size={14} className="text-slate-400 dark:text-slate-500 flex-shrink-0" />
+                          <div className="flex -space-x-1 overflow-hidden p-0.5">
+                            {Object.entries(app.documents).filter(([_, v]) => v).slice(0, 6).map(([k]) => (
+                              <div key={k} className="w-5 h-5 rounded-full bg-green-500 border-2 border-white dark:border-slate-900 shadow-sm flex-shrink-0" title={k}></div>
+                            ))}
+                            {Object.values(app.documents).filter(Boolean).length > 6 && (
+                              <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[8px] font-bold text-slate-500 flex-shrink-0">
+                                +{Object.values(app.documents).filter(Boolean).length - 6}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => openEdit(app)} className="h-10 w-10 sm:w-auto sm:px-4 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-uni-accent dark:hover:text-blue-400 rounded-xl transition-all flex items-center justify-center gap-2">
+                            <Edit2 size={16} />
+                            <span className="hidden sm:inline font-bold text-sm">Edit</span>
                           </button>
-                        )}
+                          {confirmDeleteId === app.id ? (
+                            <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
+                              <button
+                                onClick={() => deleteApplication(app.id)}
+                                className="bg-red-500 text-white text-[10px] font-black uppercase tracking-widest px-4 h-10 rounded-xl shadow-lg shadow-red-500/20"
+                              >
+                                Delete
+                              </button>
+                              <button
+                                onClick={() => setConfirmDeleteId(null)}
+                                className="text-slate-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest px-2"
+                              >
+                                No
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => setConfirmDeleteId(app.id)}
+                              className="h-10 w-10 text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all flex items-center justify-center"
+                              title="Delete"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -617,12 +627,16 @@ export default function App() {
       {/* Modal */}
       {
         isModalOpen && (
-          <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
-            <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-t-[3rem] sm:rounded-[3rem] p-8 sm:p-10 space-y-8 animate-in slide-in-from-bottom-20 duration-500 my-auto transition-colors">
-              <div className="flex items-center justify-between">
+          <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-t-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 space-y-6 sm:space-y-8 my-auto border-t sm:border border-white/10"
+            >
+              <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-3xl font-black text-slate-800 dark:text-slate-100">{formData.id ? 'Edit' : 'Add'} Application</h2>
-                  <p className="text-slate-500 dark:text-slate-400 font-medium italic">German University Tracker</p>
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">{formData.id ? 'Edit' : 'Add'} Application</h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-bold uppercase tracking-widest mt-1">University Tracker</p>
                 </div>
                 <button
                   onClick={() => {
@@ -630,7 +644,7 @@ export default function App() {
                     resetForm();
                     setNewRequirement('');
                   }}
-                  className="p-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl transition-colors text-slate-600 dark:text-slate-300"
+                  className="p-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl transition-all text-slate-600 dark:text-slate-400 active:scale-90"
                 >
                   <X size={24} />
                 </button>
@@ -646,7 +660,7 @@ export default function App() {
                         type="text"
                         value={formData.university}
                         onChange={(e) => setFormData({ ...formData, university: e.target.value })}
-                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 focus:ring-0 focus:border-uni-blue transition-all font-bold text-slate-700 dark:text-slate-200"
+                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white"
                         placeholder="e.g. TU Munich"
                       />
                     </div>
@@ -657,7 +671,7 @@ export default function App() {
                         type="text"
                         value={formData.course}
                         onChange={(e) => setFormData({ ...formData, course: e.target.value })}
-                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 focus:ring-0 focus:border-uni-blue transition-all font-bold text-slate-700 dark:text-slate-200"
+                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white"
                         placeholder="e.g. Informatics"
                       />
                     </div>
@@ -672,7 +686,7 @@ export default function App() {
                           type="date"
                           value={formData.deadline}
                           onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 focus:ring-0 focus:border-uni-blue transition-all font-bold text-german-red dark:text-red-400"
+                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-red-600 dark:text-red-400"
                         />
                       </div>
                       <div>
@@ -680,7 +694,7 @@ export default function App() {
                         <select
                           value={formData.status}
                           onChange={(e) => setFormData({ ...formData, status: e.target.value as ApplicationStatus })}
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 focus:ring-0 focus:border-uni-blue transition-all font-bold text-slate-700 dark:text-slate-200 appearance-none"
+                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white appearance-none"
                         >
                           <option>Interested</option>
                           <option>Applied</option>
@@ -694,8 +708,8 @@ export default function App() {
 
                     <div className="flex gap-4">
                       <label className={cn(
-                        "flex-1 flex items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer font-black text-[10px] uppercase tracking-widest text-center",
-                        formData.uniAssist ? "bg-blue-50 border-uni-blue text-uni-blue" : "bg-slate-50 border-transparent text-slate-400"
+                        "flex-1 flex items-center justify-center p-3 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer font-black text-[9px] sm:text-[10px] uppercase tracking-widest text-center",
+                        formData.uniAssist ? "bg-blue-50 dark:bg-blue-900/20 border-uni-accent text-uni-accent" : "bg-slate-50 dark:bg-slate-800 border-transparent text-slate-400 dark:text-slate-600"
                       )}>
                         <input
                           type="checkbox"
@@ -706,8 +720,8 @@ export default function App() {
                         Uni-Assist
                       </label>
                       <label className={cn(
-                        "flex-1 flex items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer font-black text-[10px] uppercase tracking-widest text-center",
-                        formData.vpdRequired ? "bg-amber-50 border-amber-500 text-amber-600" : "bg-slate-50 border-transparent text-slate-400"
+                        "flex-1 flex items-center justify-center p-3 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer font-black text-[9px] sm:text-[10px] uppercase tracking-widest text-center",
+                        formData.vpdRequired ? "bg-amber-50 dark:bg-amber-900/20 border-amber-500 text-amber-600 dark:text-amber-400" : "bg-slate-50 dark:bg-slate-800 border-transparent text-slate-400 dark:text-slate-600"
                       )}>
                         <input
                           type="checkbox"
@@ -825,13 +839,13 @@ export default function App() {
 
                 <button
                   type="submit"
-                  className="w-full bg-uni-blue dark:bg-blue-600 text-white py-5 rounded-[2rem] font-black text-xl shadow-lg shadow-blue-200 dark:shadow-none active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                  className="w-full bg-uni-accent text-white py-5 rounded-[2rem] font-black text-lg sm:text-xl shadow-xl shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                 >
-                  <Save size={24} />
-                  Save {formData.id ? 'Changes' : 'Application'}
+                  <Save size={24} strokeWidth={3} />
+                  {formData.id ? 'Save Changes' : 'Create Application'}
                 </button>
               </form>
-            </div>
+            </motion.div>
           </div>
         )
       }
@@ -842,13 +856,13 @@ export default function App() {
 
 function StatCard({ label, value, icon, color, darkMode }: { label: string, value: number, icon: React.ReactNode, color: string, darkMode: boolean }) {
   return (
-    <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-3 transition-colors">
-      <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", darkMode ? "bg-slate-800" : color)}>
+    <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4 hover:border-uni-accent/20 transition-all group">
+      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm", darkMode ? "bg-slate-800" : color)}>
         {icon}
       </div>
       <div>
-        <p className="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">{label}</p>
-        <p className="text-2xl font-black text-slate-800 dark:text-slate-100">{value}</p>
+        <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest">{label}</p>
+        <p className="text-3xl font-black text-slate-900 dark:text-white mt-1">{value}</p>
       </div>
     </div>
   );
