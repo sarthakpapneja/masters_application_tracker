@@ -254,7 +254,7 @@ export default function App() {
             <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-white/20">
               <GraduationCap size={40} className="text-white" />
             </div>
-            <h1 className="text-4xl font-black text-white tracking-tight">DE Masters</h1>
+            <h1 className="text-4xl font-black text-white tracking-tight">MasterTrack</h1>
             <p className="text-slate-400 font-medium">Your gateway to German excellence</p>
           </div>
 
@@ -337,7 +337,7 @@ export default function App() {
       <header className="md:hidden bg-white dark:bg-slate-900 border-b dark:border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-50 transition-colors">
         <h1 className="text-xl font-bold text-uni-blue dark:text-blue-400 flex items-center gap-2">
           <GraduationCap className="text-german-red" />
-          <span>DE Masters</span>
+          <span>MasterTrack</span>
         </h1>
         <div className="flex items-center gap-2">
           <button
@@ -360,7 +360,7 @@ export default function App() {
         <div className="hidden md:flex items-center justify-between gap-2 mb-10">
           <div className="flex items-center gap-2">
             <GraduationCap className="text-german-red w-8 h-8" />
-            <h1 className="text-2xl font-bold text-uni-blue dark:text-blue-400 text-nowrap">DE Masters</h1>
+            <h1 className="text-2xl font-bold text-uni-blue dark:text-blue-400 text-nowrap">MasterTrack</h1>
           </div>
           <button
             onClick={() => setDarkMode(!darkMode)}
