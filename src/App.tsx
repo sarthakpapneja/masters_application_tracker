@@ -567,31 +567,36 @@ export default function App() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Deadline</label>
                         <input
                           required
                           type="date"
                           value={formData.deadline}
                           onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-red-600 dark:text-red-400"
+                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white [color-scheme:dark]"
                         />
                       </div>
-                      <div>
+                      <div className="space-y-2">
                         <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Status</label>
-                        <select
-                          value={formData.status}
-                          onChange={(e) => setFormData({ ...formData, status: e.target.value as ApplicationStatus })}
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white appearance-none"
-                        >
-                          <option>Interested</option>
-                          <option>Applied</option>
-                          <option>Interview</option>
-                          <option>Accepted</option>
-                          <option>Rejected</option>
-                          <option>Enrolled</option>
-                        </select>
+                        <div className="relative">
+                          <select
+                            value={formData.status}
+                            onChange={(e) => setFormData({ ...formData, status: e.target.value as ApplicationStatus })}
+                            className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white appearance-none"
+                          >
+                            <option>Interested</option>
+                            <option>Applied</option>
+                            <option>Interview</option>
+                            <option>Accepted</option>
+                            <option>Rejected</option>
+                            <option>Enrolled</option>
+                          </select>
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <Plus size={16} className="rotate-45" />
+                          </div>
+                        </div>
                       </div>
                     </div>
 
