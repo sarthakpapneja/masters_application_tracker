@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, LayoutDashboard, ListTodo, CheckCircle2, AlertCircle, Clock, GraduationCap, Menu, X, Save, Trash2, Edit2, FileCheck, Moon, Sun, LogOut, User as UserIcon } from 'lucide-react';
+import { Plus, LayoutDashboard, ListTodo, CheckCircle2, AlertCircle, Clock, GraduationCap, Menu, X, Save, Trash2, Edit2, FileCheck, Moon, Sun, LogOut, User as UserIcon, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Application, ApplicationStatus, Stats, User, RegisteredUser } from './types';
 import { clsx, type ClassValue } from 'clsx';
@@ -575,7 +575,7 @@ export default function App() {
                           type="date"
                           value={formData.deadline}
                           onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                          className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white [color-scheme:dark]"
+                          className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white [color-scheme:dark] min-h-[56px]"
                         />
                       </div>
                       <div className="space-y-2">
@@ -584,7 +584,7 @@ export default function App() {
                           <select
                             value={formData.status}
                             onChange={(e) => setFormData({ ...formData, status: e.target.value as ApplicationStatus })}
-                            className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white appearance-none"
+                            className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-transparent rounded-2xl px-4 py-3 sm:py-4 focus:ring-4 focus:ring-uni-accent/10 focus:border-uni-accent transition-all font-bold text-slate-900 dark:text-white appearance-none pr-12 min-h-[56px]"
                           >
                             <option>Interested</option>
                             <option>Applied</option>
@@ -594,7 +594,7 @@ export default function App() {
                             <option>Enrolled</option>
                           </select>
                           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                            <Plus size={16} className="rotate-45" />
+                            <ChevronDown size={18} />
                           </div>
                         </div>
                       </div>
